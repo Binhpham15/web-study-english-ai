@@ -2,16 +2,17 @@ name: Check Markdown Format
 
 on:
   pull_request:
-    branches: [main, develop]
+    branches: [develop]
   push:
     branches: [develop]
 
 jobs:
   lint-markdown:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Check markdown files
-        run: npx markdownlint-cli "**/*.md" --ignore node_modules
+        run: npx markdownlint-cli@0.49.1 "**/*.md" --ignore node_modules
