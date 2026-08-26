@@ -7,11 +7,6 @@ const sourceSans3Heading = Source_Sans_3({subsets:['latin'],variable:'--font-hea
 
 const ibmPlexSans = IBM_Plex_Sans({subsets:['latin'],variable:'--font-sans'});
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -26,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", ibmPlexSans.variable, sourceSans3Heading.variable)}
+      className={cn("h-full", "antialiased", geistMono.variable, "font-sans", ibmPlexSans.variable, sourceSans3Heading.variable)}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
