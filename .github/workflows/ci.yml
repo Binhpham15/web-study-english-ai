@@ -1,3 +1,4 @@
+# CI pipeline for backend and frontend
 name: CI
 
 on:
