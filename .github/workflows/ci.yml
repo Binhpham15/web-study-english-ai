@@ -1,4 +1,5 @@
 # CI pipeline for backend and frontend
+#verify
 name: CI
 
 on:
