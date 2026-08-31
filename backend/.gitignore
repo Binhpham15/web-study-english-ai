@@ -26,4 +26,9 @@ yarn-error.log*
 .env
 .env.local
 .env.*.local
+# Tài liệu Prisma dành cho trợ lý AI, không thuộc mã nguồn dự án
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
 
