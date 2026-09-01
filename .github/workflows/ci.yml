@@ -35,7 +35,7 @@ jobs:
 
       - name: Test backend
         working-directory: backend
-        run: npm test -- --runInBand
+        run: npm test 
 
       - name: Build backend
         working-directory: backend
