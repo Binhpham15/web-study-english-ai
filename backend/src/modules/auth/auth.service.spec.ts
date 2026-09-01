@@ -70,7 +70,7 @@ describe('AuthService', () => {
         email: 'duyanh@example.com',
         password: plainPassword,
         confirmPassword: plainPassword,
-      } as never);
+      });
 
       const arg = prismaMock.user.create.mock.calls[0][0];
       expect(arg.data.passwordHash).not.toBe(plainPassword);
@@ -86,7 +86,7 @@ describe('AuthService', () => {
         email: 'duyanh@example.com',
         password: plainPassword,
         confirmPassword: plainPassword,
-      } as never);
+      });
 
       const arg = prismaMock.user.create.mock.calls[0][0];
       expect(arg.select.passwordHash).toBeUndefined();
@@ -106,7 +106,7 @@ describe('AuthService', () => {
           email: 'duyanh@example.com',
           password: plainPassword,
           confirmPassword: plainPassword,
-        } as never),
+        }),
       ).rejects.toThrow(ConflictException);
     });
   });
@@ -128,12 +128,12 @@ describe('AuthService', () => {
     it('email sai và mật khẩu sai trả về CÙNG một thông báo', async () => {
       prismaMock.user.findUnique.mockResolvedValue(null);
       const notFound = await service
-        .login({ email: 'khong-ton-tai@example.com', password: 'abc' } as never, {})
+        .login({ email: 'khong-ton-tai@example.com', password: 'abc' }, {})
         .catch((e) => e.message);
 
       prismaMock.user.findUnique.mockResolvedValue({ ...activeUser, passwordHash });
       const wrongPassword = await service
-        .login({ email: activeUser.email, password: 'sai-mat-khau' } as never, {})
+        .login({ email: activeUser.email, password: 'sai-mat-khau' }, {})
         .catch((e) => e.message);
 
       expect(notFound).toBe(wrongPassword);
@@ -146,9 +146,9 @@ describe('AuthService', () => {
         passwordHash: null,
       });
 
-      await expect(
-        service.login({ email: activeUser.email, password: 'abc' } as never, {}),
-      ).rejects.toThrow(UnauthorizedException);
+      await expect(service.login({ email: activeUser.email, password: 'abc' }, {})).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('chặn tài khoản đã bị khoá', async () => {
@@ -159,7 +159,7 @@ describe('AuthService', () => {
       });
 
       await expect(
-        service.login({ email: activeUser.email, password: plainPassword } as never, {}),
+        service.login({ email: activeUser.email, password: plainPassword }, {}),
       ).rejects.toThrow(UnauthorizedException);
     });
 
@@ -167,10 +167,7 @@ describe('AuthService', () => {
       prismaMock.user.findUnique.mockResolvedValue({ ...activeUser, passwordHash });
       prismaMock.refreshToken.create.mockResolvedValue({});
 
-      const result = await service.login(
-        { email: activeUser.email, password: plainPassword } as never,
-        {},
-      );
+      const result = await service.login({ email: activeUser.email, password: plainPassword }, {});
 
       expect(result.accessToken).toBe('fake.access.token');
       expect(result.user).not.toHaveProperty('passwordHash');
@@ -181,10 +178,7 @@ describe('AuthService', () => {
       prismaMock.user.findUnique.mockResolvedValue({ ...activeUser, passwordHash });
       prismaMock.refreshToken.create.mockResolvedValue({});
 
-      const result = await service.login(
-        { email: activeUser.email, password: plainPassword } as never,
-        {},
-      );
+      const result = await service.login({ email: activeUser.email, password: plainPassword }, {});
 
       const saved = prismaMock.refreshToken.create.mock.calls[0][0].data.tokenHash;
       expect(saved).not.toBe(result.refreshToken.token);
@@ -204,9 +198,7 @@ describe('AuthService', () => {
         user: { id: 'u1', isActive: true },
       });
 
-      await expect(service.refresh('token-bi-danh-cap', {})).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(service.refresh('token-bi-danh-cap', {})).rejects.toThrow(UnauthorizedException);
 
       expect(prismaMock.refreshToken.updateMany).toHaveBeenCalledWith({
         where: { userId: 'u1', revokedAt: null },
@@ -223,9 +215,7 @@ describe('AuthService', () => {
         user: { id: 'u1', isActive: true },
       });
 
-      await expect(service.refresh('token-het-han', {})).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(service.refresh('token-het-han', {})).rejects.toThrow(UnauthorizedException);
     });
 
     it('thu hồi token cũ trước khi cấp token mới', async () => {

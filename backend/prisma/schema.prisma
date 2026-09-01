@@ -18,6 +18,12 @@ enum AuthProvider {
   FACEBOOK
 }
 
+enum CefrLevel {
+  A1
+  A2
+  B1
+  B2
+}
 model User {
   id              String       @id @default(uuid())
   email           String       @unique
@@ -26,6 +32,9 @@ model User {
   providerId      String?      @map("provider_id")
   fullName        String       @map("full_name")
   avatarUrl       String?      @map("avatar_url")
+  level            CefrLevel @default(A1)
+  newWordsPerDay   Int       @default(20) @map("new_words_per_day")
+  maxReviewsPerDay Int       @default(50) @map("max_reviews_per_day")
   role            UserRole     @default(USER)
   isActive        Boolean      @default(true) @map("is_active")
   acceptedTermsAt DateTime?    @map("accepted_terms_at")

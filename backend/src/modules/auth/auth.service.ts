@@ -16,7 +16,7 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
-    private hashToken(token: string): string {
+  private hashToken(token: string): string {
     return createHash('sha256').update(token).digest('hex');
   }
 
@@ -41,10 +41,7 @@ export class AuthService {
     return { token, expiresAt };
   }
 
-  async login(
-    dto: LoginDto,
-    meta: { userAgent?: string; ipAddress?: string },
-  ) {
+  async login(dto: LoginDto, meta: { userAgent?: string; ipAddress?: string }) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -111,19 +108,13 @@ export class AuthService {
         },
       });
     } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new ConflictException('Email này đã được đăng ký');
       }
       throw error;
     }
   }
-    async refresh(
-    rawToken: string | undefined,
-    meta: { userAgent?: string; ipAddress?: string },
-  ) {
+  async refresh(rawToken: string | undefined, meta: { userAgent?: string; ipAddress?: string }) {
     if (!rawToken) {
       throw new UnauthorizedException('Không tìm thấy refresh token');
     }
@@ -143,9 +134,7 @@ export class AuthService {
         where: { userId: stored.userId, revokedAt: null },
         data: { revokedAt: new Date() },
       });
-      throw new UnauthorizedException(
-        'Phiên đăng nhập không an toàn, vui lòng đăng nhập lại',
-      );
+      throw new UnauthorizedException('Phiên đăng nhập không an toàn, vui lòng đăng nhập lại');
     }
 
     if (stored.expiresAt < new Date()) {
