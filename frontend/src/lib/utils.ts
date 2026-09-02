@@ -1,6 +1,12 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { describe, it, expect } from 'vitest';
+import { cn } from './utils';
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+describe('cn utility', () => {
+  it('merges class names correctly', () => {
+    expect(cn('foo', 'bar')).toBe('foo bar');
+  });
+
+  it('handles conditional classes', () => {
+    expect(cn('foo', false && 'bar', 'baz')).toBe('foo baz');
+  });
+});

@@ -1,18 +1,11 @@
-<<<<<<< HEAD
-node_modules/
-.env
-.env.local
-.env.*.local
-dist/
-.next/
-coverage/
-.DS_Store
-=======
-# dependencies (mọi cấp thư mục)
 node_modules/
 
 # env files
 .env*
+
+dist/
+.next/
+coverage/
 
 # OS/editor
 .DS_Store
@@ -25,4 +18,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
->>>>>>> bc554a0 (fix:sua giao dien login, register)
