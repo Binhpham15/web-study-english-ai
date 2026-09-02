@@ -1,15 +1,16 @@
-// src/app/(main)/dashboard/page.tsx
-import { PageContainer } from "@/components/shared/PageContainer";
+import Image from "next/image";
 
 export default function DashboardPage() {
   return (
-    <PageContainer>
-      <h1 className="font-heading text-2xl font-semibold text-foreground">
-        Tổng quan
-      </h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Chào mừng bạn quay lại. Đây là nơi bạn theo dõi tiến độ học tập.
-      </p>
-    </PageContainer>
+    <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden">
+      <Image
+        src="/images/dashboard.jpeg"
+        alt="Học tiếng Anh"
+        fill
+        className="object-cover"
+        priority
+      />
+      
+    </div>
   );
 }

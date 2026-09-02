@@ -3,28 +3,30 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginMock, registerMock } from "../api/auth_mock";
-import { AuthError, LoginPayload, RegisterPayload } from "../types/auth_types";
+import { AuthError, LoginPayload, RegisterPayload, User } from "../types/auth_types";
 
 const TOKEN_KEY = "auth_token";
+const USER_KEY = "auth_user";
 
 export function useAuth() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
 
+  function persistSession(token: string, user: User) {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  }
+
   async function login(payload: LoginPayload) {
     setIsLoading(true);
     setError(null);
     try {
       const res = await loginMock(payload);
-      localStorage.setItem(TOKEN_KEY, res.token);
+      persistSession(res.token, res.user);
       router.push("/dashboard");
     } catch (err) {
-      if (err instanceof AuthError) {
-        setError(err);
-      } else {
-        setError(new AuthError("UNKNOWN", "Đã có lỗi xảy ra, vui lòng thử lại."));
-      }
+      setError(err instanceof AuthError ? err : new AuthError("UNKNOWN", "Đã có lỗi xảy ra, vui lòng thử lại."));
     } finally {
       setIsLoading(false);
     }
@@ -35,18 +37,20 @@ export function useAuth() {
     setError(null);
     try {
       const res = await registerMock(payload);
-      localStorage.setItem(TOKEN_KEY, res.token);
+      persistSession(res.token, res.user);
       router.push("/dashboard");
     } catch (err) {
-      if (err instanceof AuthError) {
-        setError(err);
-      } else {
-        setError(new AuthError("UNKNOWN", "Đã có lỗi xảy ra, vui lòng thử lại."));
-      }
+      setError(err instanceof AuthError ? err : new AuthError("UNKNOWN", "Đã có lỗi xảy ra, vui lòng thử lại."));
     } finally {
       setIsLoading(false);
     }
   }
 
-  return { login, register, isLoading, error };
+  function logout() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    router.push("/login");
+  }
+
+  return { login, register, logout, isLoading, error };
 }

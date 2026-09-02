@@ -74,8 +74,8 @@
   --chart-4: oklch(0.554 0.135 66.442);
   --chart-5: oklch(0.476 0.114 61.907);
   --radius: 0.875rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar: #0F1F24;
+  --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.785 0.129 63.943);           /* amber, đồng bộ với primary */
   --sidebar-primary-foreground: oklch(0.212 0.037 66.699);
   --sidebar-accent: oklch(0.97 0 0);

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { UserMenu } from "@/components/shared/UserMenu";
 
 const navItems = [
   { href: "/dashboard", label: "Tổng quan" },
@@ -38,9 +39,8 @@ export function Header() {
       </span>
 
       <div className="ml-auto flex items-center gap-3">
-        {/* chỗ này sau này gắn avatar/user menu */}
-      </div>
-
+  <UserMenu />
+</div>
       {open && (
         <nav className="absolute left-0 right-0 top-16 flex flex-col border-b border-border bg-background p-4 shadow-lg md:hidden">
           {navItems.map((item) => (
