@@ -49,17 +49,37 @@ web-study-english-ai/
 └── CONTRIBUTING.md
 ```
 
-## Hướng dẫn cài đặt & chạy dự án
+## Hướng dẫn chạy môi trường cục bộ
 
->  Hướng dẫn đầy đủ sẽ được bổ sung sau khi hoàn thiện Docker Compose và môi trường cơ sở dữ liệu.
-
-Dự kiến:
-
+1. Clone repo và di chuyển vào thư mục dự án:
 ```bash
-git clone <repo-url>
-cd web-study-english-ai
-docker compose up
+   git clone https://github.com/Binhpham15/web-study-english-ai.git
+   cd web-study-english-ai
 ```
+
+2. Khởi động PostgreSQL bằng Docker Compose (từ thư mục gốc):
+```bash
+   docker compose up -d
+```
+
+3. Cấu hình và chạy Backend:
+```bash
+   cd backend
+   cp .env.example .env
+   npm install
+   npm run start:dev
+```
+
+4. Cấu hình và chạy Frontend (mở terminal mới):
+```bash
+   cd frontend
+   npm install
+   npm run dev
+```
+
+Backend chạy tại http://localhost:3001, Frontend tại http://localhost:3000.
+
+**Môi trường kiểm thử (Supabase):** thông tin kết nối được lưu trong GitHub Secrets (DATABASE_URL_TEST), liên hệ DevOps nếu cần quyền truy cập.
 
 ## Quy trình làm việc nhóm
 
