@@ -1,23 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { User } from "../types/auth_types";
 
 const USER_KEY = "auth_user";
 
-export function useCurrentUser() {
-  const [user, setUser] = useState<User | null>(null);
+function getInitialUser(): User | null {
+  if (typeof window === "undefined") return null;
 
-  useEffect(() => {
-    const raw = localStorage.getItem(USER_KEY);
-    if (raw) {
-      try {
-        setUser(JSON.parse(raw));
-      } catch {
-        setUser(null);
-      }
-    }
-  }, []);
+  const raw = localStorage.getItem(USER_KEY);
+  if (!raw) return null;
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export function useCurrentUser() {
+  const [user] = useState<User | null>(getInitialUser);
 
   return user;
 }
