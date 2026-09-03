@@ -24,6 +24,30 @@ enum CefrLevel {
   B1
   B2
 }
+
+enum PartOfSpeech {
+  NOUN
+  VERB
+  ADJECTIVE
+  ADVERB
+  PREPOSITION
+  PRONOUN
+  CONJUNCTION
+  INTERJECTION
+  NUMERAL
+}
+
+enum CardState {
+  NEW
+  LEARNING
+  REVIEW
+  RELEARNING
+}
+
+enum DictionaryStatus {
+  FOUND
+  NOT_FOUND
+}
 model User {
   id              String       @id @default(uuid())
   email           String       @unique
@@ -42,6 +66,7 @@ model User {
   updatedAt       DateTime     @updatedAt @map("updated_at")
 
   refreshTokens RefreshToken[]
+  cards UserCard[]
 
   @@unique([provider, providerId])
   @@map("users")
@@ -61,4 +86,80 @@ model RefreshToken {
 
   @@index([userId])
   @@map("refresh_tokens")
+}
+
+model Topic {
+  id          String   @id @default(uuid())
+  slug        String   @unique
+  name        String
+  nameEn      String?  @map("name_en")
+  description String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  words Word[]
+
+  @@map("topics")
+}
+
+model Word {
+  id             String       @id @default(uuid())
+  term           String       @unique
+  rank           Int          @unique
+  cefr           CefrLevel
+  pos            PartOfSpeech
+  ipa            String?
+  meaningVi      String       @map("meaning_vi")
+  exampleEn      String?      @map("example_en")
+  isConcreteNoun Boolean      @default(false) @map("is_concrete_noun")
+  freqPerMillion Int?         @map("freq_per_million")
+  sfi            Decimal?     @db.Decimal(5, 2)
+  topicId        String?      @map("topic_id")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  topic Topic?     @relation(fields: [topicId], references: [id], onDelete: SetNull)
+  cards UserCard[]
+
+  @@index([cefr])
+  @@index([topicId])
+  @@index([rank])
+  @@map("words")
+}
+
+model UserCard {
+  id             String    @id @default(uuid())
+  userId         String    @map("user_id")
+  wordId         String    @map("word_id")
+  state          CardState @default(NEW)
+  difficulty     Float?
+  stability      Float?
+  reps           Int       @default(0)
+  lapses         Int       @default(0)
+  dueAt          DateTime? @map("due_at")
+  lastReviewedAt DateTime? @map("last_reviewed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  word Word @relation(fields: [wordId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, wordId])
+  @@index([userId, state])
+  @@index([userId, dueAt])
+  @@map("user_cards")
+}
+
+model DictionaryEntry {
+  id           String           @id @default(uuid())
+  term         String           @unique
+  phoneticText String?          @map("phonetic_text")
+  audioUrl     String?          @map("audio_url")
+  definitions  Json?
+  source       String           @default("dictionaryapi.dev")
+  status       DictionaryStatus @default(FOUND)
+  fetchedAt    DateTime         @default(now()) @map("fetched_at")
+
+  @@map("dictionary_entries")
 }
