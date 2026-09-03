@@ -49,7 +49,7 @@ describe('VocabularyService', () => {
     it('tìm kiếm theo cả từ và nghĩa, không phân biệt hoa thường', async () => {
       prismaMock.$transaction.mockResolvedValue([[], 0]);
 
-      await service.listWords({ ...baseQuery, search: 'Book' } as ListWordsDto);
+      await service.listWords({ ...baseQuery, search: 'Book' });
 
       const where = prismaMock.word.findMany.mock.calls[0][0].where;
       expect(where.OR).toEqual([
@@ -65,7 +65,7 @@ describe('VocabularyService', () => {
         ...baseQuery,
         cefr: 'A1',
         topicId: '11111111-1111-1111-1111-111111111111',
-      } as ListWordsDto);
+      });
 
       const where = prismaMock.word.findMany.mock.calls[0][0].where;
       expect(where.cefr).toBe('A1');
@@ -83,7 +83,7 @@ describe('VocabularyService', () => {
     it('sắp xếp theo term khi sort = term', async () => {
       prismaMock.$transaction.mockResolvedValue([[], 0]);
 
-      await service.listWords({ ...baseQuery, sort: 'term' } as ListWordsDto);
+      await service.listWords({ ...baseQuery, sort: 'term' });
 
       expect(prismaMock.word.findMany.mock.calls[0][0].orderBy).toEqual({ term: 'asc' });
     });
