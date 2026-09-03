@@ -57,7 +57,7 @@ web-study-english-ai/
 1. Clone repo và di chuyển vào thư mục dự án:
 
    ```bash
-   git clone https://github.com/Binhpham15/web-study-english-ai.git
+   git clone https://github.com/web-study-english-ai/web-study-english-ai.git
    cd web-study-english-ai
    ```
 
