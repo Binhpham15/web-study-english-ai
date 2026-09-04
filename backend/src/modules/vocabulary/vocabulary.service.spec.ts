@@ -3,7 +3,18 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '@/prisma/prisma.service';
 import { VocabularyService } from './vocabulary.service';
 import { ListWordsDto } from './dto/list-words.dto';
+import { DictionaryService } from '@modules/dictionary/dictionary.service';
 
+const dictionaryMock = {
+  lookup: vi.fn().mockResolvedValue({
+    term: 'book',
+    phoneticText: '/bʊk/',
+    audioUrl: null,
+    definitions: [],
+    source: 'fallback',
+    available: false,
+  }),
+};
 const prismaMock = {
   word: { findMany: vi.fn(), count: vi.fn(), findUnique: vi.fn() },
   topic: { findMany: vi.fn() },
@@ -19,7 +30,11 @@ describe('VocabularyService', () => {
     vi.clearAllMocks();
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [VocabularyService, { provide: PrismaService, useValue: prismaMock }],
+      providers: [
+        VocabularyService,
+        { provide: PrismaService, useValue: prismaMock },
+        { provide: DictionaryService, useValue: dictionaryMock },
+      ],
     }).compile();
 
     service = module.get<VocabularyService>(VocabularyService);
@@ -96,10 +111,14 @@ describe('VocabularyService', () => {
       await expect(service.getWordById('khong-ton-tai')).rejects.toThrow(NotFoundException);
     });
 
-    it('trả về từ khi tìm thấy', async () => {
-      prismaMock.word.findUnique.mockResolvedValue({ id: 'w1', term: 'book' });
+    it('trả về từ kèm dữ liệu phát âm khi tìm thấy', async () => {
+      prismaMock.word.findUnique.mockResolvedValue({ id: 'w1', term: 'book', ipa: '/bʊk/' });
 
-      await expect(service.getWordById('w1')).resolves.toEqual({ id: 'w1', term: 'book' });
+      const result = await service.getWordById('w1');
+
+      expect(result.term).toBe('book');
+      expect(result.pronunciation.phoneticText).toBe('/bʊk/');
+      expect(dictionaryMock.lookup).toHaveBeenCalledWith('book', '/bʊk/');
     });
   });
 });

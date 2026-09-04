@@ -9,6 +9,7 @@ import { UsersModule } from '@modules/users/users.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { VocabularyModule } from '@modules/vocabulary/vocabulary.module';
 import { CardsModule } from '@modules/cards/cards.module';
+import { DictionaryModule } from '@modules/dictionary/dictionary.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { CardsModule } from '@modules/cards/cards.module';
     UsersModule,
     VocabularyModule,
     CardsModule,
+    DictionaryModule,
   ],
   controllers: [AppController],
   providers: [
