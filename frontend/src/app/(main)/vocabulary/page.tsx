@@ -12,9 +12,12 @@ import { useVocabularyDeck } from "@/features/vocabulary/hooks/useVocabularyDeck
 import { addToDeckMock } from "@/features/vocabulary/api/vocabulary_mock";
 import { VocabularyItem } from "@/features/vocabulary/types/vocabulary_types";
 import { toast } from "@/components/ui/toast";
+import { LoadingState } from "@/components/shared/LoadingState";
+import { ErrorState } from "@/components/shared/ErrorState";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 export default function VocabularyPage() {
-  const { filters, setFilters, results, selected, setSelected, isLoading } =
+  const { filters, setFilters, results, selected, setSelected, isLoading, isError, error, refetch } =
     useVocabularySearch();
   const { deck, addToDeck, removeFromDeck, isInDeck } = useVocabularyDeck();
   const [selectedDeckItem, setSelectedDeckItem] = useState<VocabularyItem | null>(null);
@@ -37,15 +40,21 @@ export default function VocabularyPage() {
 
           <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_360px]">
             <div className="space-y-3">
-              {isLoading && (
-                <p className="py-8 text-center text-sm text-muted-foreground">Đang tìm kiếm...</p>
+              {isLoading && <LoadingState text="Đang tìm kiếm..." />}
+
+              {isError && (
+                <ErrorState
+                  message={error instanceof Error ? error.message : "Không thể tải danh sách từ vựng."}
+                  onRetry={() => refetch()}
+                />
               )}
-              {!isLoading && results.length === 0 && (
-                <p className="py-8 text-center text-sm text-muted-foreground">
-                  Không tìm thấy từ vựng phù hợp.
-                </p>
+
+              {!isLoading && !isError && results.length === 0 && (
+                <EmptyState message="Không tìm thấy từ vựng phù hợp." />
               )}
+
               {!isLoading &&
+                !isError &&
                 results.map((item) => (
                   <VocabularyResultItem
                     key={item.id}
@@ -57,8 +66,8 @@ export default function VocabularyPage() {
                       try {
                         await addToDeckMock(item.id);
                         addToDeck(item);
-                      } catch (error) {
-                        console.error("Add to deck failed:", error);
+                      } catch (err) {
+                        console.error("Add to deck failed:", err);
                         toast.add({
                           title: "Không thể thêm từ vào bộ thẻ",
                           description: "Vui lòng thử lại.",

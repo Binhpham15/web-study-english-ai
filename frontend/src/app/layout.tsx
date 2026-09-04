@@ -3,6 +3,7 @@ import { Geist_Mono, IBM_Plex_Sans, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toast";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 
 const sourceSans3Heading = Source_Sans_3({
   subsets: ['latin', 'vietnamese'],
@@ -30,7 +31,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="vi"
       className={cn("h-full", "antialiased", geistMono.variable, "font-sans", ibmPlexSans.variable, sourceSans3Heading.variable)}
     >
-      <body className="min-h-full flex flex-col">{children}<Toaster /></body>
+      <body className="min-h-full flex flex-col">
+        <QueryProvider>
+          {children}
+          <Toaster />
+        </QueryProvider>
+      </body>
     </html>
   );
 }
