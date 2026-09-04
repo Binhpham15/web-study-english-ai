@@ -62,9 +62,9 @@ async function main() {
 
   const now = new Date();
 
-  // 3. Tạo dữ liệu học tập cho "learner.new@wsea.com" (Mới bắt đầu)
-  console.log('\n🌱 3. Đang tạo dữ liệu thẻ cho learner.new@wsea.com...');
-  const newUserId = userMap['learner.new@wsea.com'];
+  // 3. Tạo dữ liệu học tập cho "new@gmail.com" (Mới bắt đầu)
+  console.log('\n🌱 3. Đang tạo dữ liệu thẻ cho new@gmail.com...');
+  const newUserId = userMap['new@gmail.com'];
   let newLearnerCards = 0;
 
   // 15 thẻ mới (NEW)
@@ -108,11 +108,11 @@ async function main() {
     });
     newLearnerCards++;
   }
-  console.log(`   ✔ Đã gán ${newLearnerCards} thẻ học cho learner.new@wsea.com`);
+  console.log(`   ✔ Đã gán ${newLearnerCards} thẻ học cho new@gmail.com`);
 
-  // 4. Tạo dữ liệu học tập & Nhật ký ôn tập cho "learner.active@wsea.com" (Đầy đủ kịch bản)
-  console.log('\n📊 4. Đang giả lập dữ liệu ôn tập phong phú cho learner.active@wsea.com...');
-  const activeUserId = userMap['learner.active@wsea.com'];
+  // 4. Tạo dữ liệu học tập & Nhật ký ôn tập cho "active@gmail.com" (Đầy đủ kịch bản)
+  console.log('\n📊 4. Đang giả lập dữ liệu ôn tập phong phú cho active@gmail.com...');
+  const activeUserId = userMap['active@gmail.com'];
   let activeCardsCount = 0;
 
   // Kịch bản A: 25 thẻ mới chưa học (NEW)
@@ -252,11 +252,11 @@ async function main() {
     });
     activeCardsCount++;
   }
-  console.log(`   ✔ Đã gán ${activeCardsCount} thẻ học đa dạng kịch bản cho learner.active@wsea.com`);
+  console.log(`   ✔ Đã gán ${activeCardsCount} thẻ học đa dạng kịch bản cho active@gmail.com`);
 
-  // 5. Tạo dữ liệu học tập cho "learner.pro@wsea.com" (Trình độ B2)
-  console.log('\n🏆 5. Đang tạo dữ liệu thẻ cho learner.pro@wsea.com...');
-  const proUserId = userMap['learner.pro@wsea.com'];
+  // 5. Tạo dữ liệu học tập cho "pro@gmail.com" (Trình độ B2)
+  console.log('\n🏆 5. Đang tạo dữ liệu thẻ cho pro@gmail.com...');
+  const proUserId = userMap['pro@gmail.com'];
   let proCardsCount = 0;
 
   for (let i = 0; i < Math.min(35, wordsB2.length); i++) {
@@ -292,7 +292,7 @@ async function main() {
     });
     proCardsCount++;
   }
-  console.log(`   ✔ Đã gán ${proCardsCount} thẻ học B2 cho learner.pro@wsea.com`);
+  console.log(`   ✔ Đã gán ${proCardsCount} thẻ học B2 cho pro@gmail.com`);
 
   const duration = ((Date.now() - startTime) / 1000).toFixed(2);
   const totalCardsInDb = await prisma.userCard.count();
@@ -300,9 +300,9 @@ async function main() {
   console.log('\n------------------------------------------------------------');
   console.log(`🎉 HOÀN THÀNH TẠO DỮ LIỆU MẪU (${duration}s):`);
   console.log(`   - Tổng số tài khoản mẫu: 4 tài khoản`);
-  console.log(`   - Thẻ learner.new:        ${newLearnerCards} thẻ`);
-  console.log(`   - Thẻ learner.active:     ${activeCardsCount} thẻ (đủ 5 kịch bản NEW, LEARNING, DUE TODAY, FUTURE, RELEARNING)`);
-  console.log(`   - Thẻ learner.pro:        ${proCardsCount} thẻ`);
+  console.log(`   - Thẻ new:                ${newLearnerCards} thẻ`);
+  console.log(`   - Thẻ active:             ${activeCardsCount} thẻ (đủ 5 kịch bản NEW, LEARNING, DUE TODAY, FUTURE, RELEARNING)`);
+  console.log(`   - Thẻ pro:                ${proCardsCount} thẻ`);
   console.log(`   - Tổng số UserCard trong DB: ${totalCardsInDb} thẻ`);
   console.log('------------------------------------------------------------');
 }
