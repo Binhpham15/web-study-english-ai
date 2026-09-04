@@ -79,10 +79,10 @@ $ npm run reset:mock
 
 | Email | Mật khẩu mặc định | Vai trò | Cấp độ | Mục đích kiểm thử |
 | :--- | :--- | :---: | :---: | :--- |
-| `admin@wsea.com` | `Admin@123` | `ADMIN` | B2 | Kiểm tra phân quyền Admin, quản trị hệ thống |
-| `learner.new@wsea.com` | `User@123` | `USER` | A1 | Người mới: 15 thẻ mới (`NEW`), 5 thẻ đang học |
-| `learner.active@wsea.com` | `User@123` | `USER` | B1 | Đầy đủ kịch bản: **20 thẻ cần ôn hôm nay (Due Today)**, 25 thẻ mới, 15 thẻ đang học, 20 thẻ đã thuộc (hẹn ôn tương lai), 10 thẻ hay quên (`RELEARNING`) |
-| `learner.pro@wsea.com` | `User@123` | `USER` | B2 | Học viên nâng cao: 35 thẻ B2 phân bổ ôn tập |
+| `admin@gmail.com` | `123` | `ADMIN` | B2 | Kiểm tra phân quyền Admin, quản trị hệ thống |
+| `new@gmail.com` | `123` | `USER` | A1 | Người mới: 15 thẻ mới (`NEW`), 5 thẻ đang học |
+| `active@gmail.com` | `123` | `USER` | B1 | Đầy đủ kịch bản: **20 thẻ cần ôn hôm nay (Due Today)**, 25 thẻ mới, 15 thẻ đang học, 20 thẻ đã thuộc (hẹn ôn tương lai), 10 thẻ hay quên (`RELEARNING`) |
+| `pro@gmail.com` | `123` | `USER` | B2 | Học viên nâng cao: 35 thẻ B2 phân bổ ôn tập |
 
 ---
 

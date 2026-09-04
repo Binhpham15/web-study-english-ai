@@ -12,8 +12,8 @@ export interface MockUserConfig {
 
 export const MOCK_USERS: MockUserConfig[] = [
   {
-    email: 'admin@wsea.com',
-    password: 'Admin@123',
+    email: 'admin@gmail.com',
+    password: '123',
     fullName: 'Quản trị viên Hệ thống',
     role: UserRole.ADMIN,
     level: CefrLevel.B2,
@@ -21,8 +21,8 @@ export const MOCK_USERS: MockUserConfig[] = [
     maxReviewsPerDay: 50,
   },
   {
-    email: 'learner.new@wsea.com',
-    password: 'User@123',
+    email: 'new@gmail.com',
+    password: '123',
     fullName: 'Nguyễn Văn Khởi Đầu',
     role: UserRole.USER,
     level: CefrLevel.A1,
@@ -30,8 +30,8 @@ export const MOCK_USERS: MockUserConfig[] = [
     maxReviewsPerDay: 40,
   },
   {
-    email: 'learner.active@wsea.com',
-    password: 'User@123',
+    email: 'active@gmail.com',
+    password: '123',
     fullName: 'Trần Học Chăm Chỉ',
     role: UserRole.USER,
     level: CefrLevel.B1,
@@ -39,8 +39,8 @@ export const MOCK_USERS: MockUserConfig[] = [
     maxReviewsPerDay: 100,
   },
   {
-    email: 'learner.pro@wsea.com',
-    password: 'User@123',
+    email: 'pro@gmail.com',
+    password: '123',
     fullName: 'Lê Thành Thạo',
     role: UserRole.USER,
     level: CefrLevel.B2,
