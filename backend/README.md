@@ -57,6 +57,35 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Dữ liệu mẫu & Học liệu (Database Seeding)
+
+### 1. Các lệnh tiện ích
+
+```bash
+# Nạp 2,000 từ vựng cốt lõi (CEFR A1-B2) từ file CSV
+$ npm run seed
+
+# Nạp dữ liệu mẫu (tài khoản test + giả lập nhật ký ôn tập)
+$ npm run seed:mock
+
+# Dọn dẹp/xóa sạch dữ liệu mẫu (không làm mất 2,000 từ vựng gốc)
+$ npm run clean:mock
+
+# Xóa và tạo lại toàn bộ dữ liệu mẫu mới
+$ npm run reset:mock
+```
+
+### 2. Danh sách tài khoản mẫu (Dùng để đăng nhập test)
+
+| Email | Mật khẩu mặc định | Vai trò | Cấp độ | Mục đích kiểm thử |
+| :--- | :--- | :---: | :---: | :--- |
+| `admin@wsea.com` | `Admin@123` | `ADMIN` | B2 | Kiểm tra phân quyền Admin, quản trị hệ thống |
+| `learner.new@wsea.com` | `User@123` | `USER` | A1 | Người mới: 15 thẻ mới (`NEW`), 5 thẻ đang học |
+| `learner.active@wsea.com` | `User@123` | `USER` | B1 | Đầy đủ kịch bản: **20 thẻ cần ôn hôm nay (Due Today)**, 25 thẻ mới, 15 thẻ đang học, 20 thẻ đã thuộc (hẹn ôn tương lai), 10 thẻ hay quên (`RELEARNING`) |
+| `learner.pro@wsea.com` | `User@123` | `USER` | B2 | Học viên nâng cao: 35 thẻ B2 phân bổ ôn tập |
+
+---
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
