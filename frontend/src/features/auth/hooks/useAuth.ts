@@ -16,6 +16,14 @@ export function useAuth() {
   function persistSession(token: string, user: User) {
     localStorage.setItem(TOKEN_KEY, token);
     localStorage.setItem(USER_KEY, JSON.stringify(user));
+    // Ghi thêm vào cookie để middleware (server-side) đọc được
+    document.cookie = `${TOKEN_KEY}=${token}; path=/; max-age=${60 * 60 * 24 * 7}`; // 7 ngày
+  }
+
+  function clearSession() {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+    document.cookie = `${TOKEN_KEY}=; path=/; max-age=0`;
   }
 
   async function login(payload: LoginPayload) {
@@ -47,10 +55,18 @@ export function useAuth() {
   }
 
   function logout() {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    clearSession();
     router.push("/login");
   }
 
-  return { login, register, logout, isLoading, error };
+  function updateUser(updates: Partial<User>) {
+    const raw = localStorage.getItem(USER_KEY);
+    if (!raw) return;
+    const current: User = JSON.parse(raw);
+    const updated = { ...current, ...updates };
+    localStorage.setItem(USER_KEY, JSON.stringify(updated));
+    window.dispatchEvent(new Event("auth-user-updated"));
+  }
+
+  return { login, register, logout, updateUser, isLoading, error };
 }

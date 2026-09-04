@@ -16,8 +16,8 @@ export function AuthVisual({
   imageSrc,
   variant = "full",
 }: AuthVisualProps) {
-  const panelBg = "bg-teal-700";
-  const blobBg = "bg-teal-600/40";
+  const panelBg = accent === "rose" ? "bg-rose-700" : "bg-teal-700";
+  const blobBg = accent === "rose" ? "bg-rose-600/40" : "bg-teal-600/40";
 
   return (
     <div
@@ -68,9 +68,11 @@ export function AuthVisual({
       )}
 
       <div className="relative z-10">
-        <h2 className="font-heading text-2xl font-bold leading-snug text-white">{title}</h2>
-        <p className="mt-2 text-sm leading-relaxed text-teal-50/90">{subtitle}</p>
-      </div>
+  <h2 className="font-heading text-2xl font-bold leading-snug text-white">{title}</h2>
+  <p className={`mt-2 text-sm leading-relaxed ${accent === "rose" ? "text-rose-50/90" : "text-teal-50/90"}`}>
+    {subtitle}
+  </p>
+</div>
     </div>
   );
 }
