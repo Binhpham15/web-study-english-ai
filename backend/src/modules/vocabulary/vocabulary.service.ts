@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ListWordsDto } from './dto/list-words.dto';
+import { DictionaryService } from '@modules/dictionary/dictionary.service';
 
 const wordListSelect = {
   id: true,
@@ -23,7 +24,10 @@ const wordDetailSelect = {
 
 @Injectable()
 export class VocabularyService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly dictionaryService: DictionaryService,
+  ) {}
 
   async listTopics() {
     return this.prisma.topic.findMany({
@@ -66,8 +70,17 @@ export class VocabularyService {
   }
 
   async getWordById(id: string) {
-    const word = await this.prisma.word.findUnique({ where: { id }, select: wordDetailSelect });
-    if (!word) throw new NotFoundException('Không tìm thấy từ vựng');
-    return word;
+    const word = await this.prisma.word.findUnique({
+      where: { id },
+      select: wordDetailSelect,
+    });
+
+    if (!word) {
+      throw new NotFoundException('Không tìm thấy từ vựng');
+    }
+
+    const pronunciation = await this.dictionaryService.lookup(word.term, word.ipa);
+
+    return { ...word, pronunciation };
   }
 }
