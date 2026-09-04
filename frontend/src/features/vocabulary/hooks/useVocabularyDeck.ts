@@ -1,48 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { VocabularyItem } from "../types/vocabulary_types";
 
 const DECK_KEY = "vocabulary_deck";
 
-function readDeck(): VocabularyItem[] {
-  if (typeof window === "undefined") return [];
+let cachedRaw: string | null = null;
+let cachedDeck: VocabularyItem[] = [];
+
+function getSnapshot(): VocabularyItem[] {
+  const raw = localStorage.getItem(DECK_KEY);
+  if (raw === cachedRaw) return cachedDeck;
+
+  cachedRaw = raw;
   try {
-    const raw = localStorage.getItem(DECK_KEY);
-    return raw ? JSON.parse(raw) : [];
+    cachedDeck = raw ? JSON.parse(raw) : [];
   } catch {
-    return [];
+    cachedDeck = [];
   }
+  return cachedDeck;
 }
 
-function writeDeck(deck: VocabularyItem[]) {
-  localStorage.setItem(DECK_KEY, JSON.stringify(deck));
+function getServerSnapshot(): VocabularyItem[] {
+  return [];
+}
+
+function subscribe(callback: () => void) {
+  window.addEventListener("vocabulary-deck-updated", callback);
+  return () => window.removeEventListener("vocabulary-deck-updated", callback);
+}
+
+function writeDeck(newDeck: VocabularyItem[]) {
+  localStorage.setItem(DECK_KEY, JSON.stringify(newDeck));
   window.dispatchEvent(new Event("vocabulary-deck-updated"));
 }
 
 export function useVocabularyDeck() {
-  const [deck, setDeck] = useState<VocabularyItem[]>([]);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    setDeck(readDeck());
-
-    function sync() {
-      setDeck(readDeck());
-    }
-    window.addEventListener("vocabulary-deck-updated", sync);
-    return () => window.removeEventListener("vocabulary-deck-updated", sync);
-  }, []);
+  const deck = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   function addToDeck(item: VocabularyItem) {
-    const current = readDeck();
+    const current = getSnapshot();
     if (current.some((w) => w.id === item.id)) return;
     writeDeck([...current, item]);
   }
 
   function removeFromDeck(id: string) {
-    const current = readDeck();
+    const current = getSnapshot();
     writeDeck(current.filter((w) => w.id !== id));
   }
 
@@ -50,10 +53,5 @@ export function useVocabularyDeck() {
     return deck.some((w) => w.id === id);
   }
 
-  return {
-    deck: mounted ? deck : [], // tránh hydration mismatch, giống pattern useCurrentUser
-    addToDeck,
-    removeFromDeck,
-    isInDeck,
-  };
+  return { deck, addToDeck, removeFromDeck, isInDeck };
 }

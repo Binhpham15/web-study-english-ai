@@ -46,4 +46,4 @@ export function VocabularyResultItem({ item, isActive, isAdded, onSelect, onAdd 
       </Button>
     </div>
   );
-}1
+}

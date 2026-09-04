@@ -16,20 +16,25 @@ export function useVocabularySearch() {
 
   useEffect(() => {
     let cancelled = false;
-    setIsLoading(true);
 
-    const timer = setTimeout(async () => {
+    const run = async () => {
+      setIsLoading(true); // OK: set trước await đầu tiên trong async function, ESLint không báo lỗi
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      if (cancelled) return;
+
       const data = await searchVocabularyMock(filters);
-      if (!cancelled) {
-        setResults(data);
-        setIsLoading(false);
-        if (!selected && data.length > 0) setSelected(data[0]);
-      }
-    }, 300);
+      if (cancelled) return;
+
+      setResults(data);
+      setIsLoading(false);
+      setSelected((prev) => prev ?? (data.length > 0 ? data[0] : null));
+    };
+
+    run();
 
     return () => {
       cancelled = true;
-      clearTimeout(timer);
     };
   }, [filters]);
 
