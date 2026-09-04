@@ -1,0 +1,20 @@
+export type WordType = "n" | "v" | "adj" | "adv";
+
+export interface VocabularyItem {
+  id: string;
+  word: string;
+  ipa: string;
+  type: WordType;
+  meaningVi: string;
+  topic: string;
+  level: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
+  definition: string;
+  exampleEn: string;
+  exampleVi: string;
+}
+
+export interface VocabularyFilters {
+  query: string;
+  topic: string | "all";
+  level: string | "all";
+}
